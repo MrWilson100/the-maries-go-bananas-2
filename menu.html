@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menu | The Maries Go Bananas</title>
+<meta name="description" content="The full menu: full loaves, mini loaves, mini flight boxes, bites boards, gluten-free & vegan and Halloween specials.">
+<meta name="theme-color" content="#FFCC24">
+<link rel="icon" href="assets/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="ticker" aria-hidden="true"><div class="ticker__track"><span>🍌 NOT YOUR BASIC BANANA BREAD</span><span>🎃 Halloween Week Specials · Oct 26-31</span><span>📍 Staten Island local delivery · $20 min</span><span>💖 Baking. Laughing. Going Bananas. Together.</span><span>📸 @themariesgobananas</span><span>🚫 No same-day orders, plan ahead, bestie!</span><span>🍌 NOT YOUR BASIC BANANA BREAD</span><span>🎃 Halloween Week Specials · Oct 26-31</span><span>📍 Staten Island local delivery · $20 min</span><span>💖 Baking. Laughing. Going Bananas. Together.</span><span>📸 @themariesgobananas</span><span>🚫 No same-day orders, plan ahead, bestie!</span></div></div>
+<header class="site-header">
+  <nav class="wrap nav" aria-label="Main">
+    <a class="brand" href="index.html" aria-label="The Maries Go Bananas home"><img src="assets/img/logo.png" alt=""><span class="brand__name">The Maries<br>Go Bananas<small>NOT YOUR BASIC BANANA BREAD</small></span></a>
+    <ul class="nav__links" id="nav-links"><li><a href="index.html">Home</a></li><li><a href="menu.html" aria-current="page">Menu</a></li><li><a href="order.html">Order</a></li><li><a href="events.html">Events & Boards</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul>
+    <a class="cart-btn" href="order.html#cart" aria-label="Cart"><span aria-hidden="true">🛒</span><span class="lbl">Cart</span><span class="cart-count" data-cart-count>0</span></a>
+    <button class="menu-toggle" aria-controls="nav-links" aria-expanded="false" aria-label="Toggle menu">☰</button>
+  </nav>
+</header>
+<main id="main">
+
+<section class="page-hero bg-yellow">
+  <span class="floaty">🍌</span><span class="floaty">🍓</span><span class="floaty">🍫</span>
+  <div class="wrap"><span class="eyebrow">The menu</span><h1>Pick your <span style="color:var(--pink)">banana</span> vibe</h1><p>Full loaves, mini loaves, flight boxes, party boards and a whole gluten-free &amp; vegan collection. Everything baked fresh to order.</p></div>
+</section>
+<section style="padding-top:40px">
+  <div class="wrap">
+    <div class="filters" role="group" aria-label="Filter menu by category">
+      <button class="chip" data-filter="all" aria-pressed="true">All</button>
+      <button class="chip" data-filter="full" aria-pressed="false">🍞 Full Loaves</button>
+      <button class="chip" data-filter="mini" aria-pressed="false">🧁 Mini Loaves</button>
+      <button class="chip" data-filter="flight" aria-pressed="false">✈️ Mini Flight Boxes</button>
+      <button class="chip" data-filter="boards" aria-pressed="false">🍪 Bites Boards</button>
+      <button class="chip" data-filter="gfv" aria-pressed="false">🌱 GF &amp; Vegan</button>
+      <button class="chip" data-filter="halloween" aria-pressed="false">🎃 Halloween</button>
+    </div>
+
+    <div class="menu-group" data-group="halloween full mini" id="halloween">
+      <div class="menu-group__head"><h2>🎃 Halloween Week Specials</h2><p><span class="countdown" data-countdown style="margin:0">⏰</span><br>Available Oct 26-31 only · Full loaves, mini loaves &amp; bite-size treats. Limited quantities!</p></div>
+      <div class="grid grid-3" id="grid-halloween"></div>
+    </div>
+
+    <div class="menu-group" data-group="full" id="full">
+      <div class="menu-group__head"><h2>🍞 Full Loaves</h2><p>A whole loaf of happiness. Perfect for sharing, gifting, or hiding from your family.</p></div>
+      <div class="grid grid-4" id="grid-full"></div>
+    </div>
+
+    <div class="menu-group" data-group="mini" id="mini">
+      <div class="menu-group__head"><h2>🧁 Mini Loaves</h2><p>Individual minis, or grab a <b>box of 4 of one flavor</b> for the same price as a full loaf.</p></div>
+      <div class="grid grid-4" id="grid-mini"></div>
+    </div>
+
+    <div class="menu-group" data-group="flight" id="flight">
+      <div class="menu-group__head"><h2>✈️ Mini Flight Boxes</h2><p>Can't pick just one? Choose <b>any 4 minis</b> and mix &amp; match your favorites.</p></div>
+      <div class="grid grid-3">
+        <article class="card"><div class="card__img"><img src="assets/img/logo-box-minis.jpg" alt="Mini flight box with 4 assorted minis" loading="lazy"><div class="badges"><span class="badge">⭐ Best gift</span></div></div><div class="card__body"><h3>Classic Flight Box</h3><p>Any 4 minis from our classic (and Halloween!) flavors. Doubles allowed.</p><div class="card__foot"><span class="big-price">$20</span><a class="btn btn--pink btn--sm" href="order.html?cat=flight">Build my box</a></div></div></article>
+        <article class="card"><div class="card__img"><img src="assets/img/mini-box.jpg" alt="Box of assorted mini loaves" loading="lazy"><div class="badges"><span class="badge badge--green">🌱 GF &amp; Vegan</span></div></div><div class="card__body"><h3>GF &amp; Vegan Flight Box</h3><p>Any 4 gluten-free &amp; vegan minis: OG, Walnut Crunch, Dark CC, Blueberry, Strawberry.</p><div class="card__foot"><span class="big-price">$25</span><a class="btn btn--pink btn--sm" href="order.html?cat=flight&line=gfv">Build my box</a></div></div></article>
+        <article class="card"><div class="card__img"><img src="assets/img/boxes-stack.jpg" alt="Stack of branded Maries Go Bananas boxes" loading="lazy"><div class="badges"><span class="badge badge--pink">Favors</span></div></div><div class="card__body"><h3>Flight Boxes as Favors</h3><p>Ordering a bunch for a party, office or teacher gifts? We do bulk boxes with custom stickers.</p><div class="card__foot"><span class="big-price" style="font-size:1.2rem">Ask us!</span><a class="btn btn--ghost btn--sm" href="events.html">Events →</a></div></div></article>
+      </div>
+    </div>
+
+    <div class="menu-group" data-group="boards" id="boards">
+      <div class="menu-group__head"><h2>🍪 Banana Bread Bites Boards</h2><p>Round party boards piled with bite-size banana bread. The ultimate party flex.</p></div>
+      <div class="grid grid-3">
+        <article class="card"><div class="card__img"><img src="assets/img/party-boards.jpg" alt="16 and 18 inch banana bread bites party boards" loading="lazy"><div class="badges"><span class="badge badge--orange">30 bites</span></div></div><div class="card__body"><h3>16" Round · 3 Flavors</h3><p>30 bites, your choice of 3 flavors.</p><div class="prices"><span class="price">Classic <b>$50</b></span><span class="price">GF&amp;V <b>$75</b></span></div><div class="card__foot"><a class="btn btn--pink btn--sm" href="order.html?cat=board16">Build my board</a></div></div></article>
+        <article class="card"><div class="card__img"><img src="assets/img/halloween-platter.jpg" alt="Halloween themed bites board" loading="lazy"><div class="badges"><span class="badge badge--orange">50 bites</span></div></div><div class="card__body"><h3>18" Round · 5 Flavors</h3><p>50 bites, your choice of 5 flavors.</p><div class="prices"><span class="price">Classic <b>$75</b></span><span class="price">GF&amp;V <b>$100</b></span></div><div class="card__foot"><a class="btn btn--pink btn--sm" href="order.html?cat=board18">Build my board</a></div></div></article>
+        <article class="card" style="background:var(--yellow-soft)"><div class="card__body"><h3>Board flavors</h3>
+          <p><b>Classic:</b> Chocolate Chip · Nutella · Strawberries &amp; Nutella · Strawberries &amp; Cream · Blueberry &amp; Walnut · Cinnamon Bun Bliss</p>
+          <p><b>🌱 GF&amp;V:</b> OG · Walnut Crunch · Dark Chocolate Chip · Blueberry · Strawberry</p>
+          <p><b>🎃 Halloween:</b> Twix or Treat · Midnight Milky Way · Snickers Gone Bananas</p>
+          <div class="card__foot"><a class="btn btn--ghost btn--sm" href="events.html">Party info →</a></div></div></article>
+      </div>
+    </div>
+
+    <div class="menu-group" data-group="gfv" id="gfv">
+      <div class="menu-group__head"><h2>🌱 Gluten-Free &amp; Vegan Collection</h2><p>All the flavor, none of the gluten or dairy. Available as full loaves, minis, boxes, flights and boards.</p></div>
+      <div class="grid grid-3" id="grid-gfv"></div>
+    </div>
+
+    <div class="menu-group" data-group="full mini flight boards gfv halloween">
+      <div class="menu-group__head"><h2>💵 Quick price list</h2><p>Box of 4 minis is the same price as a full loaf of the same flavor.</p></div>
+      <div style="overflow-x:auto"><table class="price-table">
+        <thead><tr><th scope="col">Flavor</th><th scope="col">Full loaf</th><th scope="col">Mini box of 4</th><th scope="col">Individual mini</th></tr></thead>
+        <tbody>
+          <tr><td>The OG</td><td>$12</td><td>$12</td><td>$4</td></tr>
+          <tr><td>Chocolate Chip · Walnut Crunch</td><td>$15</td><td>$15</td><td>$5</td></tr>
+          <tr><td>Nutella</td><td>$18</td><td>$18</td><td>$6</td></tr>
+          <tr><td>Pistachio · Monthly Special · Strawberries &amp; Nutella · Strawberries &amp; Cream · Cinnamon Bun Bliss · Blueberry &amp; Walnut</td><td>$20</td><td>$20</td><td>$8</td></tr>
+          <tr><td>🌱 GF&amp;V OG</td><td>$16</td><td>$16</td><td>$6</td></tr>
+          <tr><td>🌱 GF&amp;V Walnut Crunch · Dark CC · Blueberry · Strawberry</td><td>$20</td><td>$20</td><td>$8</td></tr>
+          <tr><td>🎃 Twix or Treat · Midnight Milky Way · Snickers Gone Bananas</td><td>$20</td><td>$20</td><td>$8</td></tr>
+          <tr><td>✈️ Mini Flight Box (any 4)</td><td colspan="3">$20 classic · $25 GF&amp;V</td></tr>
+          <tr><td>🍪 16" Bites Board (3 flavors)</td><td colspan="3">$50 classic · $75 GF&amp;V</td></tr>
+          <tr><td>🎉 18" Bites Board (5 flavors)</td><td colspan="3">$75 classic · $100 GF&amp;V</td></tr>
+        </tbody></table></div>
+      <p class="note note--yellow" style="margin-top:20px">⚠️ <b>Allergy note:</b> our kitchen handles nuts, dairy, eggs and gluten. GF &amp; Vegan items are made with care but in a shared kitchen.</p>
+    </div>
+  </div>
+</section>
+<section class="bg-choc cta-band"><div class="wrap"><h2 style="color:var(--yellow)">Found your flavor?</h2><a class="btn" href="order.html">Build my order 🍌</a></div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand"><img src="assets/img/logo.png" alt="The Maries Go Bananas logo"><p class="motto">Baking. Laughing.<br>Going Bananas. Together.</p><p>Homemade, small-batch banana bread from two Maries on Staten Island, NY. 💛</p></div>
+    <div><h4>Explore</h4><ul><li><a href="index.html">Home</a></li><li><a href="menu.html">Menu</a></li><li><a href="order.html">Order</a></li><li><a href="events.html">Events & Boards</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><h4>The Goods</h4><ul><li><a href="menu.html#full">Full Loaves</a></li><li><a href="menu.html#mini">Mini Loaves</a></li><li><a href="menu.html#flight">Mini Flight Boxes</a></li><li><a href="menu.html#boards">Bites Boards</a></li><li><a href="menu.html#gfv">GF &amp; Vegan</a></li><li><a href="menu.html#halloween">Halloween 🎃</a></li></ul></div>
+    <div><h4>Say hi!</h4><p>📍 Staten Island, NY<br>🚗 Local delivery · $20 min<br>📅 No same-day orders</p>
+      <a class="ig-pill" href="https://www.instagram.com/themariesgobananas/" target="_blank" rel="noopener"><svg class="ig-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"/></svg> @themariesgobananas</a></div>
+  </div>
+  <div class="wrap footer-bottom"><span>© <span data-year>2026</span> The Maries Go Bananas. Made with 🍌 &amp; 💖 on Staten Island.</span><span>Website mockup · no real payments are processed</span></div>
+</footer>
+<script src="js/data.js"></script><script src="js/cart.js"></script><script src="js/menu.js"></script>
+</body>
+</html>

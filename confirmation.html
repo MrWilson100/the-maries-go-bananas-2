@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Order Confirmed | The Maries Go Bananas</title>
+<meta name="description" content="Your banana bread order request has been received.">
+<meta name="theme-color" content="#FFCC24">
+<link rel="icon" href="assets/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="ticker" aria-hidden="true"><div class="ticker__track"><span>🍌 NOT YOUR BASIC BANANA BREAD</span><span>🎃 Halloween Week Specials · Oct 26-31</span><span>📍 Staten Island local delivery · $20 min</span><span>💖 Baking. Laughing. Going Bananas. Together.</span><span>📸 @themariesgobananas</span><span>🚫 No same-day orders, plan ahead, bestie!</span><span>🍌 NOT YOUR BASIC BANANA BREAD</span><span>🎃 Halloween Week Specials · Oct 26-31</span><span>📍 Staten Island local delivery · $20 min</span><span>💖 Baking. Laughing. Going Bananas. Together.</span><span>📸 @themariesgobananas</span><span>🚫 No same-day orders, plan ahead, bestie!</span></div></div>
+<header class="site-header">
+  <nav class="wrap nav" aria-label="Main">
+    <a class="brand" href="index.html" aria-label="The Maries Go Bananas home"><img src="assets/img/logo.png" alt=""><span class="brand__name">The Maries<br>Go Bananas<small>NOT YOUR BASIC BANANA BREAD</small></span></a>
+    <ul class="nav__links" id="nav-links"><li><a href="index.html">Home</a></li><li><a href="menu.html">Menu</a></li><li><a href="order.html" aria-current="page">Order</a></li><li><a href="events.html">Events & Boards</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul>
+    <a class="cart-btn" href="order.html#cart" aria-label="Cart"><span aria-hidden="true">🛒</span><span class="lbl">Cart</span><span class="cart-count" data-cart-count>0</span></a>
+    <button class="menu-toggle" aria-controls="nav-links" aria-expanded="false" aria-label="Toggle menu">☰</button>
+  </nav>
+</header>
+<main id="main">
+
+<section class="page-hero">
+  <div class="wrap confirm" id="confirm">
+    <img src="assets/img/logo.png" alt="" style="width:130px;margin:0 auto 10px">
+    <span class="eyebrow">Order request received</span>
+    <h1>You just went <span style="color:var(--pink)">bananas!</span> 🍌</h1>
+    <p id="confirm-lead">Thanks! The Maries will text or DM you to confirm your date and payment.</p>
+    <div class="receipt" id="receipt"></div>
+    <div class="note note--green" style="text-align:left"><b>What happens next?</b><br>1️⃣ We review your order &amp; date (dates aren't guaranteed until confirmed).<br>2️⃣ We text/DM you to confirm and share payment options.<br>3️⃣ We bake it fresh &amp; you go bananas. 💛</div>
+    <p style="margin-top:26px"><a class="btn btn--pink" href="index.html">Back home</a> <a class="btn btn--ghost" href="menu.html">Browse more</a></p>
+  </div>
+</section>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  var o; try{o=JSON.parse(localStorage.getItem("tmgb_last_order"));}catch(e){}
+  var r=document.getElementById("receipt"), esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
+  if(!o){r.innerHTML='<p style="text-align:center">No recent order found. <a href="order.html">Start an order →</a></p>';document.getElementById("confirm-lead").textContent="Hmm, looks like there's nothing here yet.";return;}
+  var d=new Date(o.customer.date+"T12:00:00"), c=o.customer;
+  r.innerHTML='<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center"><span class="order-no">#'+o.number+'</span><span class="badge badge--pink">Pending confirmation</span></div>'+
+   '<dl style="margin-top:14px"><dt>Name</dt><dd>'+esc(c.name)+'</dd><dt>Phone</dt><dd>'+esc(c.phone)+'</dd>'+(c.ig?'<dt>Instagram</dt><dd>'+esc(c.ig)+'</dd>':'')+
+   '<dt>Preferred date</dt><dd>'+d.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric",year:"numeric"})+' <small>(not guaranteed)</small></dd>'+
+   '<dt>'+(c.fulfillment==="delivery"?"🚗 Delivery":"🏠 Pickup")+'</dt><dd>'+(c.fulfillment==="delivery"?esc(c.address):"Staten Island, address sent with confirmation")+'</dd>'+(c.notes?'<dt>Notes</dt><dd>'+esc(c.notes)+'</dd>':'')+'</dl>'+
+   '<table>'+o.items.map(function(i){return '<tr><td><b>'+i.qty+' × '+esc(i.label)+'</b>'+(i.detail?'<br><small>'+esc(i.detail)+'</small>':'')+'</td><td>'+TMGB.money(i.price*i.qty)+'</td></tr>';}).join('')+
+   '<tr><td><b style="font-family:var(--display);font-size:1.4rem">Total</b></td><td style="font-family:var(--display);font-size:1.4rem;color:var(--pink)">'+TMGB.money(o.subtotal)+'</td></tr></table>'+
+   '<p style="margin:0;font-size:.9rem">💳 No payment taken (mockup). Payment details are shared when the Maries confirm.</p>';
+  var em=["🍌","💖","🍓","🍫","🎉","💛"];
+  for(var k=0;k<36;k++){var s=document.createElement("span");s.className="confetti";s.textContent=em[k%em.length];s.style.left=Math.random()*100+"vw";s.style.animationDuration=(2.5+Math.random()*2.5)+"s";s.style.animationDelay=Math.random()*1.2+"s";document.body.appendChild(s);setTimeout(function(x){return function(){x.remove();};}(s),6500);}
+});
+</script>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand"><img src="assets/img/logo.png" alt="The Maries Go Bananas logo"><p class="motto">Baking. Laughing.<br>Going Bananas. Together.</p><p>Homemade, small-batch banana bread from two Maries on Staten Island, NY. 💛</p></div>
+    <div><h4>Explore</h4><ul><li><a href="index.html">Home</a></li><li><a href="menu.html">Menu</a></li><li><a href="order.html">Order</a></li><li><a href="events.html">Events & Boards</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><h4>The Goods</h4><ul><li><a href="menu.html#full">Full Loaves</a></li><li><a href="menu.html#mini">Mini Loaves</a></li><li><a href="menu.html#flight">Mini Flight Boxes</a></li><li><a href="menu.html#boards">Bites Boards</a></li><li><a href="menu.html#gfv">GF &amp; Vegan</a></li><li><a href="menu.html#halloween">Halloween 🎃</a></li></ul></div>
+    <div><h4>Say hi!</h4><p>📍 Staten Island, NY<br>🚗 Local delivery · $20 min<br>📅 No same-day orders</p>
+      <a class="ig-pill" href="https://www.instagram.com/themariesgobananas/" target="_blank" rel="noopener"><svg class="ig-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"/></svg> @themariesgobananas</a></div>
+  </div>
+  <div class="wrap footer-bottom"><span>© <span data-year>2026</span> The Maries Go Bananas. Made with 🍌 &amp; 💖 on Staten Island.</span><span>Website mockup · no real payments are processed</span></div>
+</footer>
+<script src="js/data.js"></script><script src="js/cart.js"></script>
+</body>
+</html>

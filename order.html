@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Order | The Maries Go Bananas</title>
+<meta name="description" content="Customize and order banana bread loaves, minis, flight boxes and bites boards for Staten Island pickup or local delivery.">
+<meta name="theme-color" content="#FFCC24">
+<link rel="icon" href="assets/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="ticker" aria-hidden="true"><div class="ticker__track"><span>🍌 NOT YOUR BASIC BANANA BREAD</span><span>🎃 Halloween Week Specials · Oct 26-31</span><span>📍 Staten Island local delivery · $20 min</span><span>💖 Baking. Laughing. Going Bananas. Together.</span><span>📸 @themariesgobananas</span><span>🚫 No same-day orders, plan ahead, bestie!</span><span>🍌 NOT YOUR BASIC BANANA BREAD</span><span>🎃 Halloween Week Specials · Oct 26-31</span><span>📍 Staten Island local delivery · $20 min</span><span>💖 Baking. Laughing. Going Bananas. Together.</span><span>📸 @themariesgobananas</span><span>🚫 No same-day orders, plan ahead, bestie!</span></div></div>
+<header class="site-header">
+  <nav class="wrap nav" aria-label="Main">
+    <a class="brand" href="index.html" aria-label="The Maries Go Bananas home"><img src="assets/img/logo.png" alt=""><span class="brand__name">The Maries<br>Go Bananas<small>NOT YOUR BASIC BANANA BREAD</small></span></a>
+    <ul class="nav__links" id="nav-links"><li><a href="index.html">Home</a></li><li><a href="menu.html">Menu</a></li><li><a href="order.html" aria-current="page">Order</a></li><li><a href="events.html">Events & Boards</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul>
+    <a class="cart-btn" href="order.html#cart" aria-label="Cart"><span aria-hidden="true">🛒</span><span class="lbl">Cart</span><span class="cart-count" data-cart-count>0</span></a>
+    <button class="menu-toggle" aria-controls="nav-links" aria-expanded="false" aria-label="Toggle menu">☰</button>
+  </nav>
+</header>
+<main id="main">
+
+<section class="page-hero bg-yellow" style="padding-bottom:40px">
+  <span class="floaty">🛒</span><span class="floaty">🍌</span><span class="floaty">💖</span>
+  <div class="wrap"><span class="eyebrow">Order online</span><h1>Build your <span style="color:var(--pink)">banana</span> order</h1><p>Pick a category → choose flavors → set quantity → add to cart. Then tell us when you want it!</p></div>
+</section>
+<section style="padding-top:44px">
+  <div class="wrap">
+    <div class="note" style="margin-bottom:28px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap"><span style="font-size:1.6rem" aria-hidden="true">📍</span>
+      <div><b>Delivery notes:</b> Staten Island local delivery only · $20 minimum for delivery · No same-day orders · Preferred dates are requests and not guaranteed. The Maries will confirm with you by text or DM. 💌</div></div>
+    <div class="order-layout">
+      <div>
+        <div class="panel" id="step-cat">
+          <div class="step-head"><span class="step-num">1</span><h2>Choose a category</h2></div>
+          <div class="cat-tiles" id="cat-tiles"></div>
+        </div>
+        <div class="panel" id="step-flavors" style="scroll-margin-top:100px">
+          <div class="step-head"><span class="step-num">2</span><h2>Pick your flavor(s)</h2></div>
+          <div id="flavor-area"></div>
+        </div>
+        <div class="panel" id="step-qty">
+          <div class="step-head"><span class="step-num">3</span><h2>How many?</h2></div>
+          <div class="add-row" style="border:0;padding-top:0">
+            <div id="build-summary" style="flex:1;min-width:200px"></div>
+            <div class="qty"><button type="button" id="qty-minus" aria-label="Decrease quantity">−</button><input id="qty" type="number" min="1" max="50" value="1" aria-label="Quantity"><button type="button" id="qty-plus" aria-label="Increase quantity">+</button></div>
+          </div>
+          <div class="add-row"><span class="line-total" id="line-total">$0</span><button type="button" class="btn btn--pink" id="add-btn" disabled>Add to cart 🛒</button></div>
+        </div>
+
+        <form class="panel" id="order-form" novalidate style="scroll-margin-top:100px">
+          <div class="step-head"><span class="step-num">4</span><h2>Your details</h2></div>
+          <div class="form-grid" id="order-form-fields">
+            <div class="field"><label for="c-name">Name <span class="req">*</span></label><input id="c-name" autocomplete="name" placeholder="Your name"><span class="err"></span></div>
+            <div class="field"><label for="c-phone">Phone <span class="req">*</span></label><input id="c-phone" type="tel" autocomplete="tel" placeholder="(718) 555-0123"><span class="err"></span></div>
+            <div class="field"><label for="c-ig">Instagram handle</label><input id="c-ig" placeholder="@yourhandle"><span class="hint">So we can DM you updates &amp; tag your goodies 📸</span></div>
+            <div class="field"><label for="c-date">Preferred date <span class="req">*</span></label><input id="c-date" type="date"><span class="hint">No same-day orders. Dates not guaranteed, we'll confirm!</span><span class="err"></span></div>
+            <fieldset class="field full"><legend>Pickup or delivery? <span class="req">*</span></legend>
+              <div class="radio-cards" style="margin-top:6px">
+                <div class="radio-card"><input type="radio" name="fulfillment" id="f-pickup" value="pickup" checked><label for="f-pickup"><span class="emo">🏠</span><span><b>Pickup</b><small>Staten Island · address sent on confirmation</small></span></label></div>
+                <div class="radio-card"><input type="radio" name="fulfillment" id="f-delivery" value="delivery"><label for="f-delivery"><span class="emo">🚗</span><span><b>Local delivery</b><small>Staten Island only · $20 min</small></span></label></div>
+              </div>
+            </fieldset>
+            <div class="field full" id="address-wrap" hidden>
+              <div class="form-grid">
+                <div class="field"><label for="c-address">Street address <span class="req">*</span></label><input id="c-address" autocomplete="street-address" placeholder="123 Banana Ave"><span class="err"></span></div>
+                <div class="field"><label for="c-zip">ZIP (Staten Island) <span class="req">*</span></label><input id="c-zip" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="103xx"><span class="err"></span></div>
+              </div>
+            </div>
+            <div class="field full"><label for="c-notes">Notes, allergies or special requests</label><textarea id="c-notes" placeholder="Walnuts on the blueberry? Birthday message? Tell us!"></textarea></div>
+          </div>
+          <div class="add-row"><span class="hint" style="max-width:420px">🔒 This is a mockup. No payment is collected. The Maries confirm every order and share payment options by text/DM.</span><button type="submit" class="btn btn--pink" >Place my order 🎉</button></div>
+        </form>
+      </div>
+
+      <aside class="panel cart" id="cart" aria-labelledby="cart-title" style="scroll-margin-top:100px">
+        <h2 id="cart-title">🛒 Your cart</h2>
+        <ul class="cart-items" id="cart-items"></ul>
+        <div class="totals">
+          <div><span>Subtotal</span><span id="subtotal">$0</span></div>
+          <div><span>Fulfillment</span><span id="fulfill-line">Pickup</span></div>
+          <div><span>Delivery fee</span><span>Free 💛</span></div>
+          <div id="min-wrap" hidden><div class="min-bar"><span id="min-bar" style="width:0"></span></div><div class="min-msg" id="min-msg"></div></div>
+          <div class="grand"><span>Total</span><span id="grand">$0</span></div>
+        </div>
+        <button type="button" class="btn btn--choc" id="checkout-btn" style="width:100%;margin-top:16px" disabled>Continue to details →</button>
+        <button type="button" class="rm" id="clear-cart" style="border:0;background:none;color:var(--pink);font-weight:800;cursor:pointer;margin-top:12px;text-decoration:underline">Empty cart</button>
+      </aside>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand"><img src="assets/img/logo.png" alt="The Maries Go Bananas logo"><p class="motto">Baking. Laughing.<br>Going Bananas. Together.</p><p>Homemade, small-batch banana bread from two Maries on Staten Island, NY. 💛</p></div>
+    <div><h4>Explore</h4><ul><li><a href="index.html">Home</a></li><li><a href="menu.html">Menu</a></li><li><a href="order.html">Order</a></li><li><a href="events.html">Events & Boards</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><h4>The Goods</h4><ul><li><a href="menu.html#full">Full Loaves</a></li><li><a href="menu.html#mini">Mini Loaves</a></li><li><a href="menu.html#flight">Mini Flight Boxes</a></li><li><a href="menu.html#boards">Bites Boards</a></li><li><a href="menu.html#gfv">GF &amp; Vegan</a></li><li><a href="menu.html#halloween">Halloween 🎃</a></li></ul></div>
+    <div><h4>Say hi!</h4><p>📍 Staten Island, NY<br>🚗 Local delivery · $20 min<br>📅 No same-day orders</p>
+      <a class="ig-pill" href="https://www.instagram.com/themariesgobananas/" target="_blank" rel="noopener"><svg class="ig-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"/></svg> @themariesgobananas</a></div>
+  </div>
+  <div class="wrap footer-bottom"><span>© <span data-year>2026</span> The Maries Go Bananas. Made with 🍌 &amp; 💖 on Staten Island.</span><span>Website mockup · no real payments are processed</span></div>
+</footer>
+<script src="js/data.js"></script><script src="js/cart.js"></script><script src="js/order.js"></script>
+</body>
+</html>
