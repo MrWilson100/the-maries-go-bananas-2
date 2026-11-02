@@ -1,6 +1,10 @@
 /* The Maries Go Bananas: shared site + cart logic (localStorage, no backend) */
 (function () {
   const KEY = "tmgb_cart_v1";
+  const normalizeQty = value => {
+    const qty = Number(value);
+    return Number.isFinite(qty) ? Math.max(1, Math.min(50, Math.trunc(qty))) : 1;
+  };
   const Cart = {
     get() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } },
     save(items) { localStorage.setItem(KEY, JSON.stringify(items)); Cart.renderCount(true); document.dispatchEvent(new CustomEvent("cart:change")); },
@@ -8,10 +12,16 @@
       const items = Cart.get();
       const sig = item.cat + "|" + item.flavors.join(",") + "|" + (item.variant || "");
       const ex = items.find(i => i.sig === sig);
-      if (ex) ex.qty += item.qty; else items.push(Object.assign({ id: Date.now() + Math.random().toString(36).slice(2, 6), sig }, item));
+      let added = normalizeQty(item.qty);
+      if (ex) {
+        const qty = normalizeQty(ex.qty);
+        added = Math.min(added, 50 - qty);
+        ex.qty = qty + added;
+      } else items.push(Object.assign({ id: Date.now() + Math.random().toString(36).slice(2, 6), sig }, item, {qty: added}));
       Cart.save(items);
+      return added;
     },
-    setQty(id, qty) { const items = Cart.get(); const it = items.find(i => i.id === id); if (!it) return; it.qty = Math.max(1, Math.min(50, qty)); Cart.save(items); },
+    setQty(id, qty) { const items = Cart.get(); const it = items.find(i => i.id === id); if (!it) return; it.qty = normalizeQty(qty); Cart.save(items); },
     remove(id) { Cart.save(Cart.get().filter(i => i.id !== id)); },
     clear() { Cart.save([]); },
     count() { return Cart.get().reduce((s, i) => s + i.qty, 0); },
@@ -24,6 +34,14 @@
     }
   };
   window.Cart = Cart;
+  function refreshCart() {
+    Cart.renderCount(false);
+    document.dispatchEvent(new CustomEvent("cart:change"));
+  }
+  window.addEventListener("storage", e => {
+    if (e.storageArea === localStorage && (e.key === KEY || e.key === null)) refreshCart();
+  });
+  window.addEventListener("pageshow", refreshCart);
 
   /* Toast */
   let toastTimer;
@@ -38,10 +56,22 @@
     Cart.renderCount(false);
     // mobile nav
     const btn = document.querySelector(".menu-toggle"), links = document.getElementById("nav-links");
-    if (btn && links) btn.addEventListener("click", () => {
-      const open = links.classList.toggle("open");
-      btn.setAttribute("aria-expanded", open); btn.textContent = open ? "✕" : "☰";
-    });
+    if (btn && links) {
+      const setOpen = open => {
+        links.classList.toggle("open", open);
+        btn.setAttribute("aria-expanded", open); btn.textContent = open ? "✕" : "☰";
+      };
+      btn.addEventListener("click", () => setOpen(!links.classList.contains("open")));
+      links.addEventListener("click", e => { if (e.target.closest("a")) setOpen(false); });
+      document.addEventListener("click", e => {
+        if (links.classList.contains("open") && !links.contains(e.target) && !btn.contains(e.target)) setOpen(false);
+      });
+      document.addEventListener("keydown", e => {
+        if (e.key === "Escape" && links.classList.contains("open")) {
+          setOpen(false); btn.focus(); e.preventDefault();
+        }
+      });
+    }
     // year
     document.querySelectorAll("[data-year]").forEach(e => e.textContent = new Date().getFullYear());
     // Halloween countdown (specials run Oct 26-31)

@@ -12,9 +12,11 @@
   tiles.addEventListener("click", e => { const t = e.target.closest(".tile"); if (t) selectCat(t.dataset.cat, true); });
 
   function selectCat(id, scroll) {
-    state.cat = TMGB.getCat(id); state.flavor = null; state.picks = []; state.qty = 1;
-    $$(".tile").forEach(t => t.setAttribute("aria-pressed", t.dataset.cat === id));
-    renderFlavors(); renderSummary();
+    if (!state.cat || state.cat.id !== id) {
+      state.cat = TMGB.getCat(id); state.flavor = null; state.picks = []; state.qty = 1;
+      $$(".tile").forEach(t => t.setAttribute("aria-pressed", t.dataset.cat === id));
+      renderFlavors(); renderSummary();
+    }
     if (scroll) $("#step-flavors").scrollIntoView({behavior: "smooth", block: "start"});
   }
 
@@ -59,7 +61,10 @@
   $("#flavor-area").addEventListener("click", e => {
     const c = state.cat; if (!c) return;
     const lineBtn = e.target.closest("[data-line]");
-    if (lineBtn) { state.line = lineBtn.dataset.line; state.picks = []; renderFlavors(); renderSummary(); return; }
+    if (lineBtn) {
+      if (state.line !== lineBtn.dataset.line) { state.line = lineBtn.dataset.line; state.picks = []; renderFlavors(); renderSummary(); }
+      return;
+    }
     const un = e.target.closest("[data-unpick]");
     if (un) { state.picks.splice(+un.dataset.unpick, 1); renderFlavors(); renderSummary(); return; }
     const b = e.target.closest("[data-flv]"); if (!b) return;
@@ -97,14 +102,15 @@
     $("#line-total").textContent = it ? TMGB.money(it.price * it.qty) : "$0";
     $("#add-btn").disabled = !it;
   }
-  const setQty = q => { state.qty = Math.max(1, Math.min(50, q || 1)); renderSummary(); };
+  const setQty = q => { state.qty = Number.isFinite(q) ? Math.max(1, Math.min(50, Math.trunc(q))) : 1; renderSummary(); };
   $("#qty-minus").onclick = () => setQty(state.qty - 1);
   $("#qty-plus").onclick = () => setQty(state.qty + 1);
-  $("#qty").addEventListener("change", e => setQty(parseInt(e.target.value, 10)));
+  $("#qty").addEventListener("change", e => setQty(e.target.valueAsNumber));
   $("#add-btn").addEventListener("click", () => {
     const it = currentItem(); if (!it) return;
-    Cart.add(it);
-    toast(`🎉 Added ${it.qty} × ${esc(it.label)} to your cart!`);
+    const added = Cart.add(it);
+    if (!added) { toast("Your cart already has the maximum of 50 of this item."); return; }
+    toast(`🎉 Added ${added} × ${esc(it.label)} to your cart!${added < it.qty ? " Maximum 50 per item." : ""}`);
     // reset picks but keep category for easy repeat
     state.flavor = null; state.picks = []; state.qty = 1; renderFlavors(); renderSummary();
     if (window.innerWidth < 1020) $("#cart").scrollIntoView({behavior: "smooth"});
@@ -114,13 +120,27 @@
   function fulfillment() { const r = $('input[name="fulfillment"]:checked'); return r ? r.value : "pickup"; }
   function renderCart() {
     const items = Cart.get(), list = $("#cart-items"), sub = Cart.subtotal();
-    list.innerHTML = items.length ? items.map(i => `<li class="cart-item">
+    const active = document.activeElement;
+    const focusKey = list.contains(active) && ["q", "inc", "dec", "rm"].find(key => active.dataset[key]);
+    const focusId = focusKey && active.dataset[focusKey];
+    const rows = Array.from(list.querySelectorAll(".cart-item"));
+    const sameItems = items.length > 0 && rows.length === items.length && rows.every((row, index) => row.querySelector("[data-q]").dataset.q === items[index].id);
+    // Keep quantity controls mounted so editing or tabbing doesn't lose focus.
+    if (sameItems) rows.forEach((row, index) => {
+      row.querySelector("[data-q]").value = items[index].qty;
+      row.querySelector(".big-price").textContent = TMGB.money(items[index].price * items[index].qty);
+    });
+    else list.innerHTML = items.length ? items.map(i => `<li class="cart-item">
         <b>${esc(i.label)}</b><span class="big-price" style="font-size:1.2rem">${TMGB.money(i.price * i.qty)}</span>
         ${i.detail ? `<span class="meta">${esc(i.detail)}</span>` : ""}
         <div class="row"><div class="qty qty--sm"><button type="button" data-dec="${i.id}" aria-label="Decrease">−</button>
           <input type="number" value="${i.qty}" min="1" max="50" data-q="${i.id}" aria-label="Quantity for ${esc(i.label)}"><button type="button" data-inc="${i.id}" aria-label="Increase">+</button></div>
           <button type="button" class="rm" data-rm="${i.id}">Remove</button></div></li>`).join("")
       : `<li class="empty-hint">Your cart is emptier than a banana peel 🍌<br>Build something delicious!</li>`;
+    if (!sameItems && focusKey) {
+      const next = Array.from(list.querySelectorAll(`[data-${focusKey}]`)).find(el => el.dataset[focusKey] === focusId);
+      (next || $("#clear-cart")).focus({preventScroll: true});
+    }
     $("#subtotal").textContent = TMGB.money(sub);
     $("#grand").textContent = TMGB.money(sub);
     const del = fulfillment() === "delivery";
@@ -138,7 +158,7 @@
     if (t.dataset.inc) Cart.setQty(t.dataset.inc, find(t.dataset.inc).qty + 1);
     if (t.dataset.dec) Cart.setQty(t.dataset.dec, find(t.dataset.dec).qty - 1);
   });
-  $("#cart-items").addEventListener("change", e => { if (e.target.dataset.q) Cart.setQty(e.target.dataset.q, parseInt(e.target.value, 10) || 1); });
+  $("#cart-items").addEventListener("change", e => { if (e.target.dataset.q) Cart.setQty(e.target.dataset.q, e.target.valueAsNumber); });
   $("#clear-cart").addEventListener("click", () => { if (Cart.get().length && confirm("Empty your whole cart?")) Cart.clear(); });
   $("#checkout-btn").addEventListener("click", () => { $("#order-form").scrollIntoView({behavior: "smooth"}); setTimeout(() => $("#c-name").focus(), 500); });
   document.addEventListener("cart:change", renderCart);
@@ -146,10 +166,20 @@
   /* ---------- Details form ---------- */
   const dateIn = $("#c-date");
   const ymd = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1); dateIn.min = ymd(tomorrow);
-  $$('input[name="fulfillment"]').forEach(r => r.addEventListener("change", () => { $("#address-wrap").hidden = fulfillment() !== "delivery"; renderCart(); }));
+  function updateMinDate() { const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1); dateIn.min = ymd(tomorrow); }
+  function syncFulfillment() {
+    const del = fulfillment() === "delivery";
+    $("#address-wrap").hidden = !del;
+    $$("#address-wrap input").forEach(input => { input.disabled = !del; if (!del) setErr(input.id, ""); });
+    renderCart();
+  }
+  updateMinDate();
+  dateIn.addEventListener("focus", updateMinDate);
+  $$('input[name="fulfillment"]').forEach(r => r.addEventListener("change", syncFulfillment));
+  window.addEventListener("pageshow", () => { updateMinDate(); syncFulfillment(); });
   $("#c-phone").addEventListener("input", e => {
-    const d = e.target.value.replace(/\D/g, "").slice(0, 10);
+    const raw = e.target.value.replace(/\D/g, "");
+    const d = (raw.length === 11 && raw.startsWith("1") ? raw.slice(1) : raw).slice(0, 10);
     e.target.value = d.length > 6 ? `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}` : d.length > 3 ? `(${d.slice(0,3)}) ${d.slice(3)}` : d;
   });
   $("#c-ig").addEventListener("blur", e => { const v = e.target.value.trim().replace(/^@+/, ""); e.target.value = v ? "@" + v : ""; });
@@ -157,6 +187,7 @@
   function setErr(id, msg) { const f = $("#" + id).closest(".field"); f.classList.toggle("invalid", !!msg); const er = f.querySelector(".err"); if (er) er.textContent = msg || ""; return !msg; }
   $("#order-form").addEventListener("submit", e => {
     e.preventDefault();
+    updateMinDate();
     const items = Cart.get(), sub = Cart.subtotal(), del = fulfillment() === "delivery";
     let ok = true;
     ok = setErr("c-name", $("#c-name").value.trim().length < 2 ? "We need a name for the label! 🏷️" : "") && ok;
@@ -190,5 +221,5 @@
     if (f && state.cat.mode === "single" && pool().some(x => x.id === f)) { state.flavor = f; renderFlavors(); renderSummary(); }
     setTimeout(() => $("#step-flavors").scrollIntoView({block: "start"}), 60);
   } else renderFlavors();
-  renderSummary(); renderCart();
+  renderSummary(); syncFulfillment();
 })();

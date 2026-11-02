@@ -29,21 +29,39 @@
   document.addEventListener("click", e => {
     const b = e.target.closest("[data-quick]"); if (!b) return;
     const [catId, fid] = b.dataset.quick.split(":"); const cat = TMGB.getCat(catId), f = TMGB.getFlavor(fid);
-    Cart.add({cat: catId, catName: cat.name, flavors: [fid], label: `${cat.name} · ${f.name}`, detail: "", price: TMGB.unitPrice(cat, f), qty: 1});
+    const added = Cart.add({cat: catId, catName: cat.name, flavors: [fid], label: `${cat.name} · ${f.name}`, detail: "", price: TMGB.unitPrice(cat, f), qty: 1});
+    if (!added) { toast("Your cart already has the maximum of 50 of this item."); return; }
     toast(`🍌 ${f.name} ${cat.name.toLowerCase()} added! <a href="order.html#cart">View cart →</a>`);
   });
 
   // filters
   const chips = document.querySelectorAll(".chip[data-filter]");
-  function apply(filter) {
+  function apply(filter, updateHash = true) {
     chips.forEach(c => c.setAttribute("aria-pressed", c.dataset.filter === filter));
     document.querySelectorAll("[data-group]").forEach(g => {
       const show = filter === "all" || g.dataset.group.split(" ").includes(filter);
       g.classList.toggle("is-hidden", !show);
       if (show) g.querySelectorAll(".card").forEach(c => { c.classList.remove("fade-in"); void c.offsetWidth; c.classList.add("fade-in"); });
     });
-    if (history.replaceState) history.replaceState(null, "", filter === "all" ? "menu.html" : "menu.html#" + filter);
+    if (updateHash && history.replaceState) history.replaceState(null, "", filter === "all" ? "menu.html" : "menu.html#" + filter);
   }
   chips.forEach(c => c.addEventListener("click", () => apply(c.dataset.filter)));
-  const h = location.hash.slice(1); if (h && document.querySelector(`.chip[data-filter="${h}"]`)) apply(h);
+  function applyHash() {
+    const h = location.hash.slice(1);
+    if (!h) apply("all", false);
+    else if (Array.from(chips).some(c => c.dataset.filter === h)) {
+      apply(h, false);
+      // Reveal the category before scrolling to a previously hidden section.
+      const target = document.getElementById(h);
+      if (target) {
+        const stickyBottom = [$(".site-header"), $(".filters")].reduce((bottom, el) => {
+          const style = getComputedStyle(el);
+          return style.position === "sticky" ? Math.max(bottom, (parseFloat(style.top) || 0) + el.offsetHeight) : bottom;
+        }, 0);
+        window.scrollTo({top: target.getBoundingClientRect().top + window.scrollY - stickyBottom - 16});
+      }
+    }
+  }
+  window.addEventListener("hashchange", applyHash);
+  applyHash();
 })();
