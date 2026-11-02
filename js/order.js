@@ -31,8 +31,8 @@
     const c = state.cat, single = c.mode === "single";
     const count = single ? 0 : state.picks.filter(p => p === f.id).length;
     const pressed = single ? state.flavor === f.id : count > 0;
-    const thumb = f.img ? `<img src="${TMGB.IMG + f.img}" alt="">` : `<span aria-hidden="true">${f.emoji}</span>`;
-    const sub = single ? TMGB.money(TMGB.unitPrice(c, f)) : (f.line === "halloween" ? "🎃 Halloween week" : f.line === "gfv" ? "🌱 GF & Vegan" : "Classic");
+    const thumb = f.img ? `<img src="${TMGB.IMG + f.img}" alt=""${f.photoClass ? ` class="${f.photoClass}"` : ""}>` : `<span aria-hidden="true">${f.emoji}</span>`;
+    const sub = single ? TMGB.money(TMGB.unitPrice(c, f)) : TMGB.lineLabels[f.line];
     return `<button type="button" class="flv" data-flv="${f.id}" aria-pressed="${pressed}">
       <span class="thumb" style="background:${f.color}">${thumb}</span>
       <span><b>${f.name}</b><small>${sub}</small></span>${count > 1 || (c.repeat && count) ? `<span class="cnt">×${count}</span>` : ""}</button>`;
@@ -43,7 +43,7 @@
     let html = "";
     if (c.mode === "pick") {
       html += `<div class="toggle" role="group" aria-label="Recipe type">
-        <button type="button" data-line="regular" aria-pressed="${state.line === "regular"}">Classic · ${TMGB.money(c.price.regular)}</button>
+        <button type="button" data-line="regular" aria-pressed="${state.line === "regular"}">Regular · ${TMGB.money(c.price.regular)}</button>
         <button type="button" data-line="gfv" aria-pressed="${state.line === "gfv"}">🌱 GF & Vegan · ${TMGB.money(c.price.gfv)}</button></div>
         <p style="margin-top:-4px"><b>${c.repeat ? `Pick any ${c.pick} minis, doubles allowed!` : `Pick ${c.pick} different flavors for your board.`}</b></p>`;
     }
@@ -124,7 +124,9 @@
     const focusKey = list.contains(active) && ["q", "inc", "dec", "rm"].find(key => active.dataset[key]);
     const focusId = focusKey && active.dataset[focusKey];
     const rows = Array.from(list.querySelectorAll(".cart-item"));
-    const sameItems = items.length > 0 && rows.length === items.length && rows.every((row, index) => row.querySelector("[data-q]").dataset.q === items[index].id);
+    const sameItems = items.length > 0 && rows.length === items.length && rows.every((row, index) =>
+      row.querySelector("[data-q]").dataset.q === items[index].id && row.querySelector("b").textContent === items[index].label
+      && (row.querySelector(".meta")?.textContent || "") === (items[index].detail || ""));
     // Keep quantity controls mounted so editing or tabbing doesn't lose focus.
     if (sameItems) rows.forEach((row, index) => {
       row.querySelector("[data-q]").value = items[index].qty;

@@ -5,8 +5,49 @@
     const qty = Number(value);
     return Number.isFinite(qty) ? Math.max(1, Math.min(50, Math.trunc(qty))) : 1;
   };
+  let cartNotice = {updated: false, removed: false};
+  let ready = false;
+  function reconcile(items) {
+    const catalog = window.TMGB;
+    // Informational pages can still show the saved count without loading a catalog.
+    if (!catalog || !catalog.getCat || !catalog.getFlavor) return items;
+    let changed = false;
+    const current = [];
+    items.forEach(item => {
+      const cat = item && catalog.getCat(item.cat);
+      const flavors = item && Array.isArray(item.flavors) ? item.flavors.map(catalog.getFlavor) : [];
+      const variant = item && item.variant === "gfv" ? "gfv" : "regular";
+      const valid = cat && flavors.length && flavors.every(Boolean) && (cat.mode === "single"
+        ? flavors.length === 1 && cat.lines.includes(flavors[0].line)
+        : flavors.length === cat.pick && (cat.repeat || new Set(item.flavors).size === cat.pick)
+          && flavors.every(f => (variant === "gfv" ? f.line === "gfv" : f.line !== "gfv") && (cat.id === "flight" || f.board)));
+      if (!valid) { changed = true; cartNotice.removed = true; return; }
+      const single = cat.mode === "single", flavor = flavors[0];
+      const next = Object.assign({}, item, {
+        catName: cat.name,
+        label: single ? `${cat.name} · ${flavor.name}` : `${cat.name}${variant === "gfv" ? " (GF & Vegan)" : ""}`,
+        detail: single ? (flavor.line === "gfv" ? "Gluten-free & vegan" : "") : flavors.map(f => f.short).join(" · "),
+        price: single ? catalog.unitPrice(cat, flavor) : cat.price[variant],
+        qty: normalizeQty(item.qty)
+      });
+      if (single) delete next.variant; else next.variant = variant;
+      next.sig = next.cat + "|" + next.flavors.join(",") + "|" + (next.variant || "");
+      if (JSON.stringify(next) !== JSON.stringify(item)) { changed = true; cartNotice.updated = true; }
+      current.push(next);
+    });
+    if (changed) localStorage.setItem(KEY, JSON.stringify(current));
+    return current;
+  }
+  function showCartNotice() {
+    if (!ready || (!cartNotice.updated && !cartNotice.removed)) return;
+    const messages = [];
+    if (cartNotice.updated) messages.push("Your saved cart has been updated with current menu names and prices.");
+    if (cartNotice.removed) messages.push("Items with unavailable flavors were removed. Please rebuild any affected flights or boards.");
+    toast(messages.join(" "), 8000);
+    cartNotice = {updated: false, removed: false};
+  }
   const Cart = {
-    get() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } },
+    get() { try { const items = JSON.parse(localStorage.getItem(KEY)) || []; return Array.isArray(items) ? reconcile(items) : []; } catch (e) { return []; } },
     save(items) { localStorage.setItem(KEY, JSON.stringify(items)); Cart.renderCount(true); document.dispatchEvent(new CustomEvent("cart:change")); },
     add(item) {
       const items = Cart.get();
@@ -37,6 +78,7 @@
   function refreshCart() {
     Cart.renderCount(false);
     document.dispatchEvent(new CustomEvent("cart:change"));
+    showCartNotice();
   }
   window.addEventListener("storage", e => {
     if (e.storageArea === localStorage && (e.key === KEY || e.key === null)) refreshCart();
@@ -45,15 +87,17 @@
 
   /* Toast */
   let toastTimer;
-  window.toast = function (html) {
+  window.toast = function (html, duration = 3200) {
     let t = document.querySelector(".toast");
     if (!t) { t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); t.setAttribute("aria-live", "polite"); document.body.appendChild(t); }
     t.innerHTML = html; t.classList.add("show");
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 3200);
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), duration);
   };
 
   document.addEventListener("DOMContentLoaded", () => {
+    ready = true;
     Cart.renderCount(false);
+    showCartNotice();
     // mobile nav
     const btn = document.querySelector(".menu-toggle"), links = document.getElementById("nav-links");
     if (btn && links) {
@@ -74,14 +118,5 @@
     }
     // year
     document.querySelectorAll("[data-year]").forEach(e => e.textContent = new Date().getFullYear());
-    // Halloween countdown (specials run Oct 26-31)
-    document.querySelectorAll("[data-countdown]").forEach(el => {
-      const now = new Date(), end = new Date(now.getFullYear(), 9, 31, 23, 59, 59);
-      const start = new Date(now.getFullYear(), 9, 26);
-      const days = Math.ceil((end - now) / 864e5);
-      if (now < start) el.textContent = "👻 Drops Oct 26!";
-      else if (now <= end) el.textContent = days <= 1 ? "⏰ LAST DAY to order!" : `⏰ Only ${days} spooky days left!`;
-      else el.textContent = "👻 Back next Halloween. Follow along on IG!";
-    });
   });
 })();

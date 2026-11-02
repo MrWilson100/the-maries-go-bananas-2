@@ -2,15 +2,14 @@
 (function () {
   const F = TMGB.flavors, $ = s => document.querySelector(s);
   const badgeMap = {bestseller:'<span class="badge">⭐ Bestseller</span>', "fan fave":'<span class="badge badge--pink">💖 Fan fave</span>',
-    monthly:'<span class="badge badge--pink">Loaf of the Month</span>', fall:'<span class="badge badge--orange">🍂 Fall</span>',
-    halloween:'<span class="badge badge--orange">🎃 Halloween</span>'};
+    fall:'<span class="badge badge--orange">🍂 November Fall</span>'};
   const badges = f => (f.line === "gfv" ? '<span class="badge badge--green">🌱 GF & Vegan</span>' : "") + f.tags.map(t => badgeMap[t] || "").join("");
 
   function flavorCard(f, kind) {
     let prices, addLabel, cat;
     if (kind === "full") { prices = `<span class="price">Full loaf <b>${TMGB.money(f.full)}</b></span>`; addLabel = "+ Add loaf"; cat = "full"; }
-    else if (kind === "mini") { prices = `<span class="price">Mini <b>${TMGB.money(f.mini)}</b></span><span class="price">Box of 4 <b>${TMGB.money(f.box || f.full)}</b></span>`; addLabel = "+ Add mini"; cat = "mini"; }
-    else { prices = `<span class="price">Loaf <b>${TMGB.money(f.full)}</b></span><span class="price">Mini <b>${TMGB.money(f.mini)}</b></span><span class="price">Box of 4 <b>${TMGB.money(f.box || f.full)}</b></span>`; addLabel = "+ Add loaf"; cat = "full"; }
+    else if (kind === "mini") { prices = `<span class="price">Mini <b>${TMGB.money(f.mini)}</b></span><span class="price">Box of 4 <b>${TMGB.money(f.box)}</b></span>`; addLabel = "+ Add mini"; cat = "mini"; }
+    else { prices = `<span class="price">Loaf <b>${TMGB.money(f.full)}</b></span><span class="price">Mini <b>${TMGB.money(f.mini)}</b></span><span class="price">Box of 4 <b>${TMGB.money(f.box)}</b></span>`; addLabel = "+ Add loaf"; cat = "full"; }
     return `<article class="card">
       <div class="card__img">${TMGB.visual(f)}<div class="badges">${badges(f)}</div></div>
       <div class="card__body"><h3>${f.name}</h3><p>${f.desc}</p>
@@ -20,16 +19,16 @@
       </div></article>`;
   }
   const fill = (sel, list, kind) => { const el = $(sel); if (el) el.innerHTML = list.map(f => flavorCard(f, kind)).join(""); };
-  fill("#grid-halloween", F.filter(f => f.line === "halloween"), "all");
-  fill("#grid-full", F.filter(f => f.line === "regular"), "full");
-  fill("#grid-mini", F.filter(f => f.line !== "gfv"), "mini");
+  fill("#grid-fall", F.filter(f => f.line === "fall"), "all");
+  fill("#grid-full", F.filter(f => f.line === "regular" || f.line === "premium"), "full");
+  fill("#grid-mini", F.filter(f => f.line === "regular" || f.line === "premium"), "mini");
   fill("#grid-gfv", F.filter(f => f.line === "gfv"), "all");
 
   // quick add
   document.addEventListener("click", e => {
     const b = e.target.closest("[data-quick]"); if (!b) return;
     const [catId, fid] = b.dataset.quick.split(":"); const cat = TMGB.getCat(catId), f = TMGB.getFlavor(fid);
-    const added = Cart.add({cat: catId, catName: cat.name, flavors: [fid], label: `${cat.name} · ${f.name}`, detail: "", price: TMGB.unitPrice(cat, f), qty: 1});
+    const added = Cart.add({cat: catId, catName: cat.name, flavors: [fid], label: `${cat.name} · ${f.name}`, detail: f.line === "gfv" ? "Gluten-free & vegan" : "", price: TMGB.unitPrice(cat, f), qty: 1});
     if (!added) { toast("Your cart already has the maximum of 50 of this item."); return; }
     toast(`🍌 ${f.name} ${cat.name.toLowerCase()} added! <a href="order.html#cart">View cart →</a>`);
   });

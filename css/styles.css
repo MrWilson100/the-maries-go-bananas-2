@@ -110,16 +110,20 @@ section{padding:84px 0}
 .sticker{position:absolute;font-family:var(--display);background:var(--pink);color:#fff;border:3px solid var(--choc);border-radius:50%;width:110px;height:110px;display:grid;place-items:center;text-align:center;line-height:1;font-size:1.05rem;transform:rotate(12deg);box-shadow:var(--shadow-sm);right:4%;top:0;z-index:3}
 .floaty{position:absolute;font-size:2.2rem;opacity:.9;animation:float 6s ease-in-out infinite;pointer-events:none}
 
-/* ---------- halloween callout ---------- */
-.spooky{background:linear-gradient(135deg,#2a1608,#3B210F 50%,#4a2a12);color:var(--cream);border-radius:32px;border:4px solid var(--choc);box-shadow:0 10px 0 #FF8A1F;padding:40px;display:grid;grid-template-columns:1fr 1.1fr;gap:34px;align-items:center;position:relative;overflow:hidden}
-.spooky h2{color:#FF8A1F}
-.spooky h2 span{color:var(--yellow)}
-.spooky__img{border-radius:22px;overflow:hidden;border:3px solid #FF8A1F;transform:rotate(-2deg);aspect-ratio:4/3}
-.spooky__img img{width:100%;height:100%;object-fit:cover}
-.spooky__list{list-style:none;padding:0;margin:0 0 22px;display:grid;gap:10px}
-.spooky__list li{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.07);padding:10px 14px;border-radius:14px;border:2px dashed rgba(255,138,31,.6)}
-.spooky__list b{font-family:var(--round);font-size:1.08rem;color:var(--yellow)}
-.countdown{display:inline-flex;gap:8px;font-family:var(--round);font-weight:700;margin-bottom:14px;background:#FF8A1F;color:var(--choc);padding:6px 14px;border-radius:99px}
+/* ---------- seasonal callout ---------- */
+#fall-specials{scroll-margin-top:90px}
+.seasonal{background:linear-gradient(135deg,#2a1608,#3B210F 50%,#4a2a12);color:var(--cream);border-radius:32px;border:4px solid var(--choc);box-shadow:0 10px 0 #FF8A1F;padding:40px;display:grid;grid-template-columns:1fr 1.1fr;gap:34px;align-items:center;position:relative;overflow:hidden}
+.seasonal h2{color:#FF8A1F}
+.seasonal h2 span{color:var(--yellow)}
+.seasonal__photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;transform:rotate(-2deg)}
+.seasonal__photos figure{margin:0;border:3px solid #FF8A1F;border-radius:18px;overflow:hidden;background:var(--choc);display:flex;flex-direction:column}
+.seasonal__photos img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+.seasonal__photos figcaption{padding:10px 12px;font-family:var(--round);font-size:.92rem;font-weight:700;line-height:1.25;color:var(--cream);text-align:center;margin:auto 0}
+.seasonal__photos figure:nth-child(3) img{object-position:center 58%}
+.seasonal__list{list-style:none;padding:0;margin:0 0 22px;display:grid;gap:10px}
+.seasonal__list li{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.07);padding:10px 14px;border-radius:14px;border:2px dashed rgba(255,138,31,.6)}
+.seasonal__list b{font-family:var(--round);font-size:1.08rem;color:var(--yellow)}
+.seasonal-label{display:inline-flex;gap:8px;font-family:var(--round);font-weight:700;margin-bottom:14px;background:#FF8A1F;color:var(--choc);padding:6px 14px;border-radius:99px}
 
 /* ---------- product cards ---------- */
 .grid{display:grid;gap:26px}
@@ -395,7 +399,7 @@ fieldset.field{border:0;padding:0;margin:0}
   .cart-btn{order:3}
   .menu-toggle{order:4;margin-left:0}
   .brand{margin-right:auto}
-  .hero__grid,.split,.spooky,.event-cards,.founder-cards{grid-template-columns:1fr}
+  .hero__grid,.split,.seasonal,.event-cards,.founder-cards{grid-template-columns:1fr}
   .hero__art{max-width:460px;margin:0 auto;width:100%}
   .grid-3,.grid-4,.quotes,.contact-cards{grid-template-columns:repeat(2,1fr)}
   .ig-grid{grid-template-columns:repeat(3,1fr)}
@@ -410,7 +414,7 @@ fieldset.field{border:0;padding:0;margin:0}
   .footer-grid{grid-template-columns:1fr}
   .brand__name{font-size:1.05rem}.brand img{width:46px;height:46px}
   .cart-btn .lbl{display:none}
-  .spooky{padding:24px}
+  .seasonal{padding:24px}
   .panel{padding:18px}
   .filters{position:static}
   .sticker{width:86px;height:86px;font-size:.85rem}
@@ -422,3 +426,11 @@ fieldset.field{border:0;padding:0;margin:0}
   .floaty{display:none}
   .cart-btn{padding:8px 12px}
 }
+
+/* Frame the two blueberry loaves independently using the supplied shared image. */
+.card__img img.product-photo--blueberry,.card__img img.product-photo--blueberry-walnut,
+.flv .thumb img.product-photo--blueberry,.flv .thumb img.product-photo--blueberry-walnut{position:absolute;width:200%;max-width:none;height:auto;top:50%;left:0;transform:translateY(-50%);object-fit:contain}
+.card__img img.product-photo--blueberry-walnut,.flv .thumb img.product-photo--blueberry-walnut{left:-100%}
+.card:hover .card__img img.product-photo--blueberry,.card:hover .card__img img.product-photo--blueberry-walnut{transform:translateY(-50%)}
+.flv .thumb{position:relative}
+@media(max-width:600px){.seasonal__photos{gap:10px;transform:none}.seasonal__photos figcaption{font-size:.82rem;padding:8px}}
