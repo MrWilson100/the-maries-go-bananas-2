@@ -30,7 +30,7 @@ Fonts (Lilita One, Fredoka, Nunito) load from Google Fonts; offline, the site fa
 - `js/menu.js`: menu rendering + filters
 - `js/order.js`: order builder, cart UI, validation, mock checkout
 - `assets/img/`: existing logo and reference images cropped from the brand guide & Instagram screenshots
-- `assets/img/owner/`: 13 optimized WebP product photos supplied by the owner, including the combined blueberry and mini flight box photos; the menu poster is excluded
+- `assets/img/owner/`: 15 optimized WebP product photos supplied by the owner, including the combined blueberry, mini flight box, and two 18-inch party-board photos; the menu poster is excluded
 - `assets/brand-guide.pdf`: original brand guide
 
 ## Order rules built in
@@ -50,5 +50,5 @@ Prices below are full loaf / mini box of 4 / individual mini.
 - GF&V: The OG $16 / $25 / $6; Dark Chocolate, Blueberry Bliss, Walnut Crunch, and Strawberry Bliss $20 / $25 / $8.
 
 ## Placeholder content (swap before launch)
-Reviews, founder fun facts, and flavor descriptions are sample copy. The existing party-board reference images still contain Halloween artwork; updated board photos have not been supplied.
+Reviews, founder fun facts, and flavor descriptions are sample copy. Both new party-board photos show 18-inch, 50-bite boards. The birthday-themed photo is temporarily used for the 16-inch product cards, labeled "18-inch board shown." Replace that photo and remove the note when the owner supplies the 16-inch photos. The football-themed photo is used for the 18-inch cards. The birthday loaf in Events & Boards remains unchanged.
 Gluten-free & vegan flavors without a dedicated photo use colorful emoji placeholder blocks.
